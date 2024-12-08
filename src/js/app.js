@@ -33,14 +33,33 @@ function render(variables = {}) {
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
           <img src="${variables.avatarURL}" class="photo" />
-          <h1>Lucy Boilett</h1>
-          <h2>Web Developer</h2>
-          <h3>Miami, USA</h3>
-          <ul class="position-right">
-            <li><a href="https://twitter.com/4geeksacademy"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="https://github.com/4geeksacademy"><i class="fab fa-github"></i></a></li>
-            <li><a href="https://linkedin.com/school/4geeksacademy"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="https://instagram.com/4geeksacademy"><i class="fab fa-instagram"></i></a></li>
+          <h1>${variables.name === null ? "Nombre" : variables.name} ${
+    variables.lastName === null ? "Apellidos" : variables.lastName
+  }</h1>
+          <h2>${variables.role === null ? "Ocupacion" : variables.role}</h2>
+          <h3>${variables.city === null ? "Ciudad" : variables.city}</h3>
+          <h4>${variables.country === null ? "Pais" : variables.Pais}</h4>
+          <ul class="${variables.socialMediaPosition}">
+          ${
+            variables.twitter
+              ? `<li><a href="https://x.com/${variables.twitter}?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" target="_blank"><i class="fab fa-twitter"></i></a></li>`
+              : ""
+          }
+          ${
+            variables.github
+              ? `<li><a href="https://github.com/${variables.github}" target="_blank"><i class="fab fa-github"></i></a></li>`
+              : ""
+          }
+          ${
+            variables.linkedin
+              ? `<li><a href="https://br.linkedin.com/in/${variables.linkedin}?trk=people-guest_people_search-card" target="_blank"><i class="fab fa-linkedin"></i></a></li>`
+              : ""
+          }
+          ${
+            variables.instagram
+              ? `<li><a href="https://www.instagram.com/${variables.instagram}/?hl=es" target="_blank"><i class="fab fa-instagram"></i></a></li>`
+              : ""
+          }
           </ul>
         </div>
     `;
@@ -85,6 +104,33 @@ window.onload = function() {
           : this.value == "false"
           ? false
           : this.value;
+
+      if (attribute === "includeCover") {
+        const options = e.target.querySelectorAll("option");
+        options.forEach(option => {
+          if (option.value === "") {
+            option.style.display = "none"; // Hide the option 'Include Cover'
+          }
+        });
+      }
+
+      // Handle the change in 'socialMediaPosition' (left or right)
+      if (attribute === "socialMediaPosition") {
+        const selectedValue = e.target.value;
+        values.socialMediaPosition =
+          selectedValue === "position-left"
+            ? "position-left"
+            : "position-right";
+      }
+      if (
+        attribute === "twitter" ||
+        attribute === "github" ||
+        attribute === "linkedin" ||
+        attribute === "instagram"
+      ) {
+        values[attribute] = this.value;
+      }
+
       render(Object.assign(window.variables, values)); // render again the card with new values
     });
   });
